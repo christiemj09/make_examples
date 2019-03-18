@@ -116,7 +116,7 @@ phony targets). Likewise, Make doesn't require that your targets be "built"
 in the traditional sense; any file can be a target, including
 [empty files](https://www.gnu.org/software/make/manual/html_node/Empty-Targets.html).
 For this example, the target was an empty file that we "built" by updating
-the last-modified timestamp of an empty file with the `touch` command. We
+its last-modified timestamp with the `touch` command. We
 used the empty file `track/<letter>.txt` to record the last time we checked
 for changes to `files/<letter>.txt`.
 
