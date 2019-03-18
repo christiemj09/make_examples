@@ -1,4 +1,4 @@
-# Use Make to detect that a file has changed.
+# Detect that a file has changed.
 
 One of the simplest uses for Make outside its
 traditional uses is reporting files that have
@@ -46,13 +46,11 @@ files/b.txt
 files/c.txt
 ```
 
-Make now has a report time for each file stored in the
-last-modified timestamp of the file `track/<letter>.txt`.
-Make can compare that timestamp to the last-modified
-timestamp of `files/<letter>.txt` (the prerequisite for
-`track/<letter>.txt`) in order to determine if it needs
-to report that `files/<letter>.txt` has changed since the
-last time it reported changes.
+Make now has a report time for each file `files/<letter>.txt`
+stored in the last-modified timestamp of the file
+`track/<letter>.txt`. On future runs, Make can use this information
+to determine if one of our files has changed since the last run. If
+we don't change any files, then Make has nothing to report.
 
 ```
 $ ls track # The track directory contains files with report times
@@ -100,6 +98,28 @@ files/a.txt
 files/b.txt
 ```
 
+Having seen the list of files change between runs, let's take a moment to
+step through what Make does to determine if it should report a file:
+* If `track/<letter>.txt` doesn't exist, report it.
+* Otherwise, compare the last-modified timestamps of `track/<letter>.txt` and `files/<letter>.txt`.
+* If the timestamp for `files/<letter>.txt` is more recent than the timestamp for `track/<letter>.txt`, report it.
+* Update the timestamp for `track/<letter>.txt` to the current time.
+
+Compare that to how Make processes a rule in general:
+* If a rule's target doesn't exist, then run its recipe (to build its target).
+* Otherwise, if one of the rule's prerequisites has been updated since the target was last updated, run its recipe (to build its target).
+
+The general case assumes that rules exist in order to build their targets,
+and that targets should be rebuilt if the input used to build them has
+changed. However, Make doesn't require this; it's just convention (look up
+phony targets). Likewise, Make doesn't require that your targets be "built"
+in the traditional sense; any file can be a target, including
+[empty files](https://www.gnu.org/software/make/manual/html_node/Empty-Targets.html).
+For this example, the target was an empty file that we "built" by updating
+the last-modified timestamp of an empty file with the `touch` command. We
+used the empty file `track/<letter>.txt` to record the last time we checked
+for changes to `files/<letter>.txt`.
+
 ## Reset the project
 
 Most projects come with a way to reset them.
@@ -146,4 +166,4 @@ files/c.txt
 ## Notes
 
 * The [configure script](https://www.gnu.org/software/automake/manual/html_node/GNU-Build-System.html) and the [clean and distclean targets](https://www.gnu.org/prep/standards/html_node/Standard-Targets.html) are standard aspects of a Make project whose contents and purposes are probably more rigidly defined than they are in this example.
-* This and other examples make heavy use of [empty target files](). While more substantive targets should be used when they're available (e.g. don't use an empty target to register when a *.o file has changed), they seem to be really useful for extending the use  of Make beyond code builds.
+* This and other examples make heavy use of [empty target files](https://www.gnu.org/software/make/manual/html_node/Empty-Targets.html). While more substantive targets should be used when they're available (e.g. don't use an empty target to register when a *.o file has changed), they seem to be really useful for extending the use of Make beyond code builds.
