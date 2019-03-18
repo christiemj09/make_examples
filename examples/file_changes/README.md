@@ -94,6 +94,7 @@ Bosphorus is a strait exiting the Black Sea.
 
 Running Make:
 
+```
 $ make -s
 files/a.txt
 files/b.txt
