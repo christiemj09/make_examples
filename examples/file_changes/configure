@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# A shell script that configures this project.
+
+# Contains timestamps for when changes in tracked files were detected.
+mkdir -p track
